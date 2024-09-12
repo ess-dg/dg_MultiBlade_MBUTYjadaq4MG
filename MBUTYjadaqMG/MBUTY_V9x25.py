@@ -74,9 +74,9 @@ sync = False   #ON/OFF if you want to rsync the data
 
 # pathsourceEFU      = 'efu@192.168.0.58:/home/efu/data/MB18-setup/'
 #pathsourceJDQ      = 'jadaq@192.168.0.57:/home/jadaq/data/MG2024/'  #AT STF   #mb@192.168.0.2:/home/mb/data/cable_atten/'
-pathsourceJDQ      = 'mb@192.168.0.1:/home/mb/data/VMMtest/'
+pathsourceJDQ      = 'mb@172.30.244.176:/home/mb/data/VMMtest/' #'mb@192.168.0.1:/home/mb/data/VMMtest/'
 
-desitnationpath  = '/Users/alexanderbackis/Desktop/VMMtestCAEN/'
+desitnationpath  = '/Users/francescopiscitelli/Desktop/a/'
 
 
 # desitnationpath    = '/Users/francescopiscitelli/Desktop/dd/'
@@ -87,7 +87,7 @@ datapath         = os.path.abspath('.')+'/data/'
 
 filename = '13827-C-ESSmask-20181116-120805_00000.h5'
 
-acqnum = [0]
+acqnum = [0,1]
 
 # filename = sys.argv[2]
 # def get_acqnums(fname):
@@ -117,14 +117,17 @@ SingleFileDuration       = 60     #s to check if h5 file has all the resets
 
 ###############################################################################
 # variable POPH will be saved in a new h5 file
-saveReducedData = False #ON/OFF
+saveReducedData = True #ON/OFF
 
 # savereducedpath = os.path.join('/home/efu/data/reduced', sys.argv[1], '')
 
     
-savereducedpath = '/Users/francescopiscitelli/Desktop/reducedFile/'
+# savereducedpath = '/Users/francescopiscitelli/Desktop/reducedFile/'
 
-reducedDataInAbsUnit = False   #ON/OFF if ON data reduced X and Y is in mm, otherwise in ch number 
+savereducedpath = datapath
+
+# reducedDataInAbsUnit = True   #ON/OFF if ON data reduced X and Y is in mm, otherwise in ch number 
+# removed option it is only ch no X and Y and Z is in mm 
 
 nameMainFolder  = 'entry1'
 
@@ -136,6 +139,8 @@ compressionHDFL  = 9     # gzip compression level 0 - 9
 # CREMAT from MG 
 digitID = [35]
 
+wiresPerRow = 20
+
 # any other stuff
 digitOT = 26122
 
@@ -143,7 +148,7 @@ EMMAMONch   = 63
 
 He3ch   = 8
 
-MOch    = [0,1,4,9]
+MOch    = [0,1,2,3]
 
 ###############################################################################
 # mapping channels into geometry 
@@ -165,7 +170,7 @@ Timewindow        = 3e-6    #s to create clusters
 
 plotChRaw         = True   #ON/OFF plot of raw ch in the file (not flipped, not swapped) no thresholds (only for 1st serial)
 
-plottimestamp     = True   #ON/OFF for debugging, plot the events VS time stamp (after thresholds)
+plottimestamp     = False   #ON/OFF for debugging, plot the events VS time stamp (after thresholds)
 
 plottimeTofs      = False   #ON/OFF for debugging, plot the time duration of ToFs (after thresholds)
 
@@ -243,18 +248,21 @@ elif positionRecon == 2:
 
 # declare distnaces with .0 to force them to be float not int 
    
-inclination             = 5.0       #deg
-wirepitch               = 4.0       #mm 
-strippitch              = 4.0       #mm 
-OffsetOf1stWires        = 11.0      #mm
+# inclination             = 5.0       #deg
+# wirepitch               = 4.0       #mm 
+# strippitch              = 4.0       #mm 
+# OffsetOf1stWires        = 11.0      #mm
 
-DistanceWindow1stWire = 38.0        #mm distance between vessel window and first wire
-DistanceAtWindow      = 19000.0     #mm from chopper to detector window
+DistanceWindow1stWire = 20        #mm distance between vessel window and first wire
+DistanceAtWindow      = 10000.0     #mm from chopper to detector window
 Distance              = DistanceWindow1stWire + DistanceAtWindow    #mm  flight path at 1st wire
-DistanceSampleWindow  = 4000.0      #mm
-DistanceSample1stWire = DistanceWindow1stWire + DistanceSampleWindow #mm
-BladeAngularOffset    = 0.15      #deg
+# DistanceSampleWindow  = 0.0      #mm
+# DistanceSample1stWire = DistanceWindow1stWire + DistanceSampleWindow #mm
+# BladeAngularOffset    = 0.0      #deg
 
+VoxelX = 23.5 #mm
+VoxelZ = 10 #mm
+VoxelY = 25 #mm
 
 ###############################################################################
 # plot the 2D image of the detector, lambda and ToF in linear =0 or log scale =1
@@ -262,13 +270,13 @@ plotIMGinLogScale = False
    
 ###############################################################################
 # LAMBDA: calcualates lambda and plot hist 
-calculateLambda  = False    # ON/OFF  
+calculateLambda  = True    # ON/OFF  
 
-plotLambdaHist   = False    # ON/OFF hist per digitiser (all ch summed togheter)
+plotLambdaHist   = True    # ON/OFF hist per digitiser (all ch summed togheter)
                         # (calculateLambda has to be ON to plot this)
    
-lambdaBins      = 127   
-lambdaRange     = [2.5, 10]    #A
+lambdaBins      = 256   
+lambdaRange     = [0.001, 10]    #A
 
 #if chopper has two openings or more per reset of ToF
 MultipleFramePerReset = False  #ON/OFF (this only affects the lambda calculation)
@@ -292,14 +300,14 @@ MONThreshold = 0   #threshold on MON, th is OFF if 0, any other value is ON
  
 plotMONtofPH = True   #ON/OFF plotting (MON ToF and Pulse Height) 
 
-MONDistance  = 0   #m distance of MON from chopper if plotMONtofPH == 1 (needed for lambda calculation if ToF)
+MONDistance  = 10   #m distance of MON from chopper if plotMONtofPH == 1 (needed for lambda calculation if ToF)
 
 
 ###############################################################################
 
-He3Threshold = 0 
+He3Threshold = 0  #threshold on He3, th is OFF if 0, any other value is ON
 
-He3Distance  = 0
+He3Distance  = 11 #m distance 
 
 
 ###############################################################################
@@ -456,13 +464,13 @@ if saveReducedData is True:
     
     # check if file already exist and in case yes delete it 
     if os.path.exists(outfile):
-       print('\n \033[1;33mWARNING: Reduced DATA file exists, it will be overwritten!\033[1;37m')
-       os.system('rm '+outfile)
+        print('\n \033[1;33mWARNING: Reduced DATA file exists, it will be overwritten!\033[1;37m')
+        os.system('rm '+outfile)
        
     # if you want to save reduced data, it must include lambda, so lambda calculation is turned ON if not yet 
     if calculateLambda is False:
-       calculateLambda = True
-       print('\n \t Lambda calculation turned ON to save reduced DATA')
+        calculateLambda = True
+        print('\n \t Lambda calculation turned ON to save reduced DATA')
      
     fid    = h5py.File(outfile, "w")
     
@@ -474,30 +482,34 @@ if saveReducedData is True:
                 'ToF-duration (s)': ToFduration,
                 'DistanceAtWindow (mm)': DistanceAtWindow,
                 'Distance (mm)': Distance,
-                'DistanceSampleWindow (mm)': DistanceSampleWindow,
-                'DistanceSample1stWire mm)' : DistanceSample1stWire,
-                'PickUpTimeShift (s)': PickUpTimeShift,
-                'BladeAngularOffset (deg)': BladeAngularOffset,
-                'OffsetOf1stWires (mm)': OffsetOf1stWires,
+                'Distance MON (m)': MONDistance,
+                'Distance He3 (m)': He3Distance,
                 }.items():
         ginstr.attrs.create(key, value)
+        
+    for key, value in {
+                'VoxelX (mm)': VoxelX,
+                'VoxelZ (mm)': VoxelZ,
+                'VoxelY (mm)': VoxelY,
+                }.items():
+        gdet.attrs.create(key, value)
     
     grun   = fid.create_group(nameMainFolder+'/run')
     
     # if MONfound is True:
-    #    gmon = fid.create_group(nameMainFolder+'/monitor')
-    #    gmon.attrs.create('columns:ToF,PH,lambda',1)
-    #    gmon.attrs.create('units:seconds,a.u.,angstrom',1)
-    ##### 
+    #     gmon = fid.create_group(nameMainFolder+'/monitor')
+    #     gmon.attrs.create('columns:ToF,CH,PH,lambda',1)
+    #     gmon.attrs.create('units:seconds,chno,a.u.,angstrom',1)
+    #### 
 
-    #grun.create_dataset('duration', data=(len(acqnum)*(SingleFileDuration or 0)))
-    #grun.attrs.create('seconds',1)
+    grun.create_dataset('duration', data=(len(acqnum)*(SingleFileDuration or 0)))
+    grun.attrs.create('seconds',1)
     
     gdet.attrs.create('columns:X,Y,ToF,PHwires,PHstrips,multW,multS,Z,lambda',1)
-    if reducedDataInAbsUnit is True:
-        gdet.attrs.create('units:mm,mm,seconds,a.u.,a.u.,int,int,mm,angstrom',1)
-    elif reducedDataInAbsUnit is False:
-        gdet.attrs.create('units:chNum,chNum,seconds,a.u.,a.u.,int,int,mm,angstrom',1)
+    # if reducedDataInAbsUnit is True:
+    #     gdet.attrs.create('units:mm,mm,seconds,a.u.,a.u.,int,int,mm,angstrom',1)
+    # elif reducedDataInAbsUnit is False:
+    gdet.attrs.create('units:chNum,chNum,seconds,a.u.,a.u.,int,int,mm,angstrom',1)
  
     gdet.create_dataset('arrangement', data=digitID ) #physical order of the digitizers
     
@@ -835,10 +847,12 @@ for dd in range(len(digitID)):
             #####################################         
             # lambda
             if calculateLambda is True:
+                
+               # wireChforX = np.floor_divide(POPH[:,0],wiresPerRow)
                
-               #distance (in m) from first wire to the wire hit in depth       
-               cosse = np.cos(np.deg2rad(inclination)) 
-               ZFirstWire = (POPH[:,0]*(wirepitch*cosse))  #mm
+               wireChforZ = np.mod(POPH[:,0],wiresPerRow)
+               
+               ZFirstWire = (wireChforZ*VoxelZ)  #mm
                
                Dist  = Distance + ZFirstWire #mm
                
@@ -947,7 +961,7 @@ for dd in range(len(digitID)):
 ##################################### 
 #END LOOP OVER ACQNUM
 #####################################    
-    if flag != 2 :    
+    if flag ==0  :    
         # fill global hist  
         indexes = (dd*len(XX) + np.arange(len(XX)))
     
@@ -1054,20 +1068,20 @@ for dd in range(len(digitID)):
         # saving data to h5 file      
         if saveReducedData is True:
     
-           if reducedDataInAbsUnit is True:
-                   sinne = np.sin(np.deg2rad(inclination)) 
+            # if reducedDataInAbsUnit is True:
+            #         # sinne = np.sin(np.deg2rad(inclination)) 
                    
-                   # ucomment this line if you want to include the offset of blades at 1st wire in the reduced data 
-                   # POPHcum[:,0] = np.round( (POPHcum[:,0]*(wirepitch*sinne) + OffsetOf1stWires*dd), decimals=2 )  #mm
+            #         # ucomment this line if you want to include the offset of blades at 1st wire in the reduced data 
+            #         # POPHcum[:,0] = np.round( (POPHcum[:,0]*(wirepitch*sinne) + OffsetOf1stWires*dd), decimals=2 )  #mm
                    
-                   POPHcum[:,0] = np.round( (POPHcum[:,0]*(wirepitch*sinne)), decimals=2 )  #mm
+            #         POPHcum[:,0] = np.round( (POPHcum[:,0]*(wirepitch*sinne)), decimals=2 )  #mm
                         
-                   POPHcum[:,1] = np.round((POPHcum[:,1]*strippitch), decimals=2 )  #mm
-                   POPHcum[POPHcum[:,1]<0,1] = -1
+            #         POPHcum[:,1] = np.round((POPHcum[:,1]*strippitch), decimals=2 )  #mm
+            #         POPHcum[POPHcum[:,1]<0,1] = -1
                    
             
-           gdetdigit = gdet.create_group('digit'+ str(digitID[dd]))
-           gdetdigit.create_dataset('data', data=POPHcum, compression=compressionHDFT, compression_opts=compressionHDFL)
+            gdetdigit = gdet.create_group('digit'+ str(digitID[dd]))
+            gdetdigit.create_dataset('data', data=POPHcum, compression=compressionHDFT, compression_opts=compressionHDFL)
               
 #####################################            
 ##################################### 
@@ -1077,20 +1091,20 @@ for dd in range(len(digitID)):
 ###############################################################################
 ###############################################################################
 
-if flag != 2 :
+if flag == 0 :
       # saving data to h5 file      
     if saveReducedData is True:
        
-       if MONdigit in digitID:
-           Tduration = Durations[:, digitID.index(MONdigit)].sum()
-       else:
-           Tduration = Durations[:, 0].sum()
+        # if MONdigit in digitID:
+        #     Tduration = Durations[:, digitID.index(MONdigit)].sum()
+        # else:
+        Tduration = Durations[:, 0].sum()
        
-       grun.create_dataset('TotalDuration', data=Tduration)
-       grun.attrs.create('seconds',1)
+        grun.create_dataset('TotalDuration', data=Tduration)
+        grun.attrs.create('seconds',1)
        
-       grun.create_dataset('Durations', data=Durations)
-       #run.attrs.create('seconds',1)
+        grun.create_dataset('Durations', data=Durations)
+        #run.attrs.create('seconds',1)
      
 ###############################################################################
 ###############################################################################
@@ -1124,7 +1138,7 @@ if flag != 2 :
 ###############################################################################
 ###############################################################################
 
-if flag != 2 :
+if flag == 0 :
      
     # if closeGaps == 0 or closeGaps == 2:     
         
@@ -1245,11 +1259,29 @@ if MONOnOff is True:
         MONfound = True
 elif MONOnOff is False:
     MONfound = False
+
+if saveReducedData is True:
+    if MONfound is True:
+        gmon = fid.create_group(nameMainFolder+'/monitor')
+        gmon.attrs.create('columns:ToF,CH,PH,lambda',1)
+        gmon.attrs.create('units:seconds,chno,a.u.,angstrom',1)
+        
+        ghe = fid.create_group(nameMainFolder+'/He3tube')
+        ghe.attrs.create('columns:ToF,CH,PH,lambda',1)
+        ghe.attrs.create('units:seconds,chno,a.u.,angstrom',1)
+        
+        gMO = fid.create_group(nameMainFolder+'/MOVMM')
+        gMO.attrs.create('columns:ToF,CH,PH,lambda',1)
+        gMO.attrs.create('units:seconds,chno,a.u.,angstrom',1)
     
 # read the file
 ##################################### 
 #START LOOP OVER ACQNUM
-#####################################      
+#####################################   
+
+
+Durations2 = np.zeros((len(acqnum),1))
+   
 for ac in range(len(acqnum)):
 
    
@@ -1293,7 +1325,7 @@ for ac in range(len(acqnum)):
                SingleFileDurationFromFile = tsecn[-1] 
                ratePerDigit[1,dd] =  ratePerDigit[1,dd] + SingleFileDurationFromFile
                
-               Durations[ac,dd] = SingleFileDurationFromFile
+               Durations2[ac,0] = SingleFileDurationFromFile
           
                if abs(SingleFileDurationFromFile-SingleFileDuration) > 1: #if they differ for more then 1s then warning
                    print('\n     \033[1;33mWARNING: check file duration ... found %.2f s, expected %.2f s \033[1;37m' % (SingleFileDurationFromFile,SingleFileDuration))
@@ -1378,9 +1410,9 @@ for ac in range(len(acqnum)):
 ##################################### 
 #END LOOP OVER ACQNUM
 ##################################### 
-            
+
 if flag2 == 0:
-    
+       
 #####################################  
 # MON 
     if MONfound is True and np.shape(MONdataCum)[0]>0:
@@ -1394,7 +1426,7 @@ if flag2 == 0:
             MONToFhistCum = hh.hist1(ToFx,MONdataCum[:,0],1)
             MONPHShistCum = hh.hist1(xener,MONdataCum[:,2],1)
                  
-            figmon, (axm1, axm2) = plt.subplots(num=801, figsize=(6,6), nrows=1, ncols=2)    
+            figmon, (axm1, axm2, axml) = plt.subplots(num=801, figsize=(12,6), nrows=1, ncols=3)    
             pos2 = axm1.step(ToFx*1e3,MONToFhistCum,'m',where='mid')
             axm1.set_xlabel('ToF (ms)')
             axm1.set_ylabel('counts')
@@ -1422,17 +1454,16 @@ if flag2 == 0:
                
             MONLamHistCum = hh.hist1(xlambda,MONdataCum[:,3],1) 
             
-            figmonl, axml = plt.subplots(num=802, figsize=(6,6), nrows=1, ncols=1)
+            # figmonl, axml = plt.subplots(num=802, figsize=(6,6), nrows=1, ncols=1)
             axml.step(xlambda,MONLamHistCum,'m',where='mid')
             axml.set_xlabel('lambda (A)')
             axml.set_ylabel('counts')
             axml.set_title('MON lambda')
+            
            
-        MONtotCounts = len(MONdataCum[:,0])   
+        
          
-#     if saveReducedData is True:  
-#       gmon.create_dataset('counts', data=[MONtotCounts], compression=compressionHDFT, compression_opts=compressionHDFL)
-#       gmon.create_dataset('data', data=MONdataCum, compression=compressionHDFT, compression_opts=compressionHDFL)
+
 
 ###############################################################################
 # He3 tube 
@@ -1447,7 +1478,7 @@ if flag2 == 0:
         He3ToFhistCum = hh.hist1(ToFx,He3dataCum[:,0],1)
         He3PHShistCum = hh.hist1(xener,He3dataCum[:,2],1)
              
-        figHe3, (axHe31, axHe32) = plt.subplots(num=8010, figsize=(6,6), nrows=1, ncols=2)    
+        figHe3, (axHe31, axHe32, axHe3l) = plt.subplots(num=8010, figsize=(12,6), nrows=1, ncols=3)    
         pos2 = axHe31.step(ToFx*1e3,He3ToFhistCum,'k',where='mid')
         axHe31.set_xlabel('ToF (ms)')
         axHe31.set_ylabel('counts')
@@ -1468,19 +1499,66 @@ if flag2 == 0:
                
             He3LamHistCum = hh.hist1(xlambda,He3dataCum[:,3],1) 
             
-            figHe3l, axHe3l = plt.subplots(num=8020, figsize=(6,6), nrows=1, ncols=1)
+            # figHe3l, axHe3l = plt.subplots(num=8020, figsize=(6,6), nrows=1, ncols=1)
             axHe3l.step(xlambda,He3LamHistCum,'k',where='mid')
             axHe3l.set_xlabel('lambda (A)')
             axHe3l.set_ylabel('counts')
-            axHe3l.set_title('MON lambda')
+            axHe3l.set_title('He3 lambda')
 
 ###############################################################################
 # VMM MO
-###############################################################################       
+###############################################################################      
+
 
     if np.shape(MOdataCum)[0]>0:
         
-        pass 
+        NumPlots = np.shape(MOch)[0]
+        
+        figMO, axMO = plt.subplots(num=801009, figsize=(12,6), nrows=2, ncols=NumPlots)  
+        axMO.shape      = (2,NumPlots)
+        axMO = np.atleast_2d(axMO)
+        
+        for kk, mmo in enumerate(MOch):
+            
+            selMO = MOdataCum[:,1] == mmo
+       
+            MOToFhist = hh.hist1(ToFx,MOdataCum[selMO,0],1)
+            MOPHShist = hh.hist1(xener,MOdataCum[selMO,2],1)
+            
+            axMO[0,kk].step(ToFx*1e3,MOToFhist,'b',where='mid')
+            axMO[0,kk].set_xlabel('ToF (ms)')
+            axMO[0,kk].set_ylabel('counts')
+            axMO[0,kk].set_title('MO ToF')
+            axMO[1,kk].step(xener,MOPHShist,'b',where='mid')
+            axMO[1,kk].set_xlabel('pulse height (a.u.)')
+            axMO[1,kk].set_ylabel('counts')
+            axMO[1,kk].set_title('MO PHS')
+ 
+###############################################################################        
+
+    MONtotCounts = len(MONdataCum[:,0])   
+    
+    He3counts = np.shape(He3dataCum)[0]
+    
+    if saveReducedData is True:  
+          gmon.create_dataset('counts', data=[MONtotCounts], compression=compressionHDFT, compression_opts=compressionHDFL)
+          gmon.create_dataset('data', data=MONdataCum, compression=compressionHDFT, compression_opts=compressionHDFL)
+          
+          ghe.create_dataset('counts', data=[He3counts], compression=compressionHDFT, compression_opts=compressionHDFL)
+          ghe.create_dataset('data', data=He3dataCum, compression=compressionHDFT, compression_opts=compressionHDFL)
+          
+          # ghe.create_dataset('counts', data=[He3counts], compression=compressionHDFT, compression_opts=compressionHDFL)
+          gMO.create_dataset('data', data=MOdataCum, compression=compressionHDFT, compression_opts=compressionHDFL)
+          
+          grun.create_dataset('durationOtherDigit', data=(len(acqnum)*(SingleFileDuration or 0)))
+          grun.attrs.create('seconds',1)
+          
+          Tduration2 = Durations2[:, 0].sum()
+         
+          grun.create_dataset('TotalDurationOtherDigit', data=Tduration2)
+          grun.attrs.create('seconds',1)
+         
+          grun.create_dataset('DurationsOtherDigit', data=Durations2)
 
 
 ###############################################################################       
@@ -1491,11 +1569,15 @@ if flag2 == 0:
  
  # MO PHS and ToF ? 
  
- # lambda for MO ????
+ # lambda for MO ????]
+ 
+ #  save in ascii Helambda and MON lambda and Tof and MG lambda and Tof 
+ 
+ # make it in HDF MONdata, MOdata, HE3 data, POPH with lambda 
  
  
  
- 
+############################################################################### 
 
 
    
@@ -1511,8 +1593,8 @@ if flag2 == 0:
 ###############################################################################
 ###############################################################################
 if saveReducedData is True:
-   # close h5 file
-   fid.close()   
+    # close h5 file
+    fid.close()   
 ###############################################################################
 ###############################################################################
 
