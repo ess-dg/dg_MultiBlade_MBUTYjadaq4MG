@@ -291,7 +291,7 @@ PickUpTimeShift =  13.5/(2.*180.) * ToFduration/NumOfBunchesPerPulse  #s
 # NOTE: if the MON does not have any ToF, lambda and ToF spectra can be
 # still calculated but perhaps meaningless
 
-MONOnOff = True       #ON/OFF
+MONOnOff = False       #ON/OFF
 
 MONdigit = digitOT    #digitiser of the Monitor
 MONch    = EMMAMONch      #ch after reorganization of channels (from 0 to 63)
@@ -1261,7 +1261,7 @@ elif MONOnOff is False:
     MONfound = False
 
 if saveReducedData is True:
-    if MONfound is True:
+    # if MONfound is True:
         gmon = fid.create_group(nameMainFolder+'/monitor')
         gmon.attrs.create('columns:ToF,CH,PH,lambda',1)
         gmon.attrs.create('units:seconds,chno,a.u.,angstrom',1)
@@ -1279,8 +1279,10 @@ if saveReducedData is True:
 #START LOOP OVER ACQNUM
 #####################################   
 
-
+MONdataCum = np.zeros((1,1))
 Durations2 = np.zeros((len(acqnum),1))
+MOdataCum  = np.zeros((1,1))
+He3dataCum = np.zeros((1,1))
    
 for ac in range(len(acqnum)):
 
@@ -1415,6 +1417,7 @@ if flag2 == 0:
        
 #####################################  
 # MON 
+    MONtotCounts = 0 
     if MONfound is True and np.shape(MONdataCum)[0]>0:
       
         if MONThreshold > 0:
@@ -1461,7 +1464,7 @@ if flag2 == 0:
             axml.set_title('MON lambda')
             
            
-        
+        MONtotCounts = len(MONdataCum[:,0])   
          
 
 
@@ -1469,6 +1472,8 @@ if flag2 == 0:
 # He3 tube 
 ###############################################################################
 
+    He3counts = 0
+    
     if np.shape(He3dataCum)[0]>0:
         
         if He3Threshold > 0:
@@ -1504,6 +1509,8 @@ if flag2 == 0:
             axHe3l.set_xlabel('lambda (A)')
             axHe3l.set_ylabel('counts')
             axHe3l.set_title('He3 lambda')
+            
+        He3counts = np.shape(He3dataCum)[0]
 
 ###############################################################################
 # VMM MO
@@ -1536,9 +1543,9 @@ if flag2 == 0:
  
 ###############################################################################        
 
-    MONtotCounts = len(MONdataCum[:,0])   
+
     
-    He3counts = np.shape(He3dataCum)[0]
+
     
     if saveReducedData is True:  
           gmon.create_dataset('counts', data=[MONtotCounts], compression=compressionHDFT, compression_opts=compressionHDFL)
