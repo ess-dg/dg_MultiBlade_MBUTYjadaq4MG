@@ -156,7 +156,7 @@ MOch    = [0,1,2,3]
 MAPPING = True     # ON/OFF, if OFF channels are used as in the file
 
 mappath = os.path.join(currentLoc,'tables/')
-mapfile = 'MG_EMMA_mapping_B.xlsx'
+mapfile = 'MG_EMMA_shaper_mapping_B.xlsx'
 
 ###############################################################################
                     
